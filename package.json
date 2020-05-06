@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "run": "node build/.",
+    "build": "tsc --outFile build/ src/"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
 }

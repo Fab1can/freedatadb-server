@@ -3,32 +3,22 @@ const {Model} = require("./Model.js");
 const {Value} = require("./Value.js");
 
 class Datum {
-  constructor(label, model, user, datetime) {
-    if(label == undefined){
-      throw new UndefinedLabelError();
-    }else{
-      this.label = label;
-    }
+  label : string;
+  model : Model;
+  user : Datum;
+  datetime : Date;
 
-    if(!(model instanceof Model)){
-      throw new InvalidModelError();
-    }else{
-      this.model = model;
-    }
+  constructor(label : string, model : Model, user? : Datum, datetime : Date = new Date()) {
+    this.label = label;
+    this.model = model;
 
-    if(!(datetime instanceof Date)){
-      throw new InvalidDatetimeError();
-    }else{
-      this.datetime = datetime;
-    }
-
-    if(!(user instanceof Datum)){
-      throw new InvalidUserError();
-    }else if(!user.model.descend("User")){
+    if(user != undefined && !user.model.descend("User")){
       throw new ModelMismatchError();
     }else{
       this.user = user;
     }
+
+    this.datetime = datetime;
 
     this.data = [];
   }

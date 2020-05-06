@@ -2,7 +2,11 @@ const {InvalidModelError} = require("./errors.js");
 
 class Model {
   constructor(name, attributes, parents) {
-    this.name = name;
+    if(name == undefined){
+      throw new UndefinedModelNameError();
+    }else{
+      this.name = name;
+    }
     this.attributes = attributes;
     this.parents = parents;
   }
