@@ -1,30 +1,30 @@
-const {InvalidModelError} = require("./errors.js");
+import { Attribute } from "./Attribute";
 
-class Model {
-  constructor(name, attributes, parents) {
-    if(name == undefined){
-      throw new UndefinedModelNameError();
-    }else{
-      this.name = name;
-    }
-    this.attributes = attributes;
-    this.parents = parents;
+export class Model {
+  private _name : string;
+  private _attributes : Record<string,Attribute>;
+  private _parents : Model[];
+
+  constructor(name : string, attributes : Record<string,Attribute>, parents : Model[] = []) {
+    this._name = name;
+    this._attributes = attributes;
+    this._parents = parents;
   }
 
-  descend(model){
-    if(model instanceof Model){
-      if(this.name==model.name){
-        return true;
-      }else{
-        for (var i = 0; i < this.parents.length; i++) {
-          if(this.parents[i].descend(model)){
-            return true;
-          }
+  public get name() : string {
+    return this._name;
+  }
+
+  public descend(modelName : string){
+    if(this.name==modelName){
+      return true;
+    }else{
+      for (var i = 0; i < this._parents.length; i++) {
+        if(this._parents[i].descend(modelName)){
+          return true;
         }
       }
-      return false;
-    }else{
-      throw new InvalidModelError();
     }
+    return false;
   }
 }

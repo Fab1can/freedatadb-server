@@ -1,37 +1,39 @@
-const {InvalidUserError, InvalidLabelError, InvalidModelError, InvalidDatetimeError, ModelMismatchError} = require("./errors.js");
-const {Model} = require("./Model.js");
-const {Value} = require("./Value.js");
+import { Model } from "./Model";
+import { Value } from "./Value";
+import { ModelMismatchError, QuantityMismatchError } from "./errors";
 
-class Datum {
-  label : string;
-  model : Model;
-  user : Datum;
-  datetime : Date;
+export class Datum {
+  private _label : string;
+  private _model : Model;
+  private _user : Datum | undefined;
+  private _datetime : Date;
+  private _data : Record<string,Value>;
 
   constructor(label : string, model : Model, user? : Datum, datetime : Date = new Date()) {
-    this.label = label;
-    this.model = model;
+    this._label = label;
+    this._model = model;
 
     if(user != undefined && !user.model.descend("User")){
       throw new ModelMismatchError();
     }else{
-      this.user = user;
+      this._user = user;
     }
 
-    this.datetime = datetime;
+    this._datetime = datetime;
 
-    this.data = [];
+    this._data = {};
   }
 
-  set(key, value){
-    if(!(value instanceof Value)){
-      throw new InvalidValueError();
-    }
-    if(key in this.data){
-      if(this.data[key].type==value.type){
-        this.data[key] = value;
+  public get model() : Model {
+    return this._model;
+  }
+
+  set(key : string, value : Value){
+    if(key in this._data){
+      if(this._data[key].quantity.name==value.quantity.name){
+        this._data[key] = value;
       }else{
-        throw new TypeMismatchError();
+        throw new QuantityMismatchError();
       }
     }
   }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "run": "node build/.",
-    "build": "tsc --outFile build/ src/"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
